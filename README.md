@@ -8,6 +8,8 @@ createCrudReducers - a higher-order function that creates a reducer for a given 
 
 fetchAdapter - CrudActionCreators takes an adapter which provides the ability to make API calls. This adapter implements API calls using Fetch API and is included in order to provide a default and make the library testable without adding a dependency
 
+[![npm version](https://badge.fury.io/js/redux-thunk-crud.svg)](http://badge.fury.io/js/redux-thunk-crud)
+
 ## Installation
 
 ```sh
