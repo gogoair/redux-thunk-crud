@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "./node_modules/babel-cli/bin/babel.js ./src/* --out-dir lib",
-    "pre-commit": "lint-staged && npm test",
+    "precommit": "lint-staged && npm test",
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register"
   },
   "lint-staged": {
