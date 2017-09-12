@@ -1,0 +1,52 @@
+{
+  "name": "redux-thunk-crud",
+  "version": "0.8.0",
+  "description": "A set of utilities to handle creation of common reducers and action creators that work with CRUD endpoints of RESTful APIs",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "./node_modules/babel-cli/bin/babel.js ./src/* --out-dir lib",
+    "pre-commit": "lint-staged && npm test",
+    "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register"
+  },
+  "lint-staged": {
+    "*.{js,json.css}": [
+      "prettier --config .prettierrc --write",
+      "git add"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gogoair/redux-thunk-crud.git"
+  },
+  "keywords": [
+    "redux",
+    "crud"
+  ],
+  "author": "Gogo Inc.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/gogoair/redux-thunk-crud/issues"
+  },
+  "homepage": "https://github.com/gogoair/redux-thunk-crud#readme",
+  "peerDependencies": {
+    "redux": "*"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "chai-redux": "^1.0.1",
+    "es6-promise": "^4.1.1",
+    "fetch-mock": "^5.12.2",
+    "husky": "^0.14.3",
+    "isomorphic-fetch": "^2.2.1",
+    "lint-staged": "^4.1.3",
+    "mocha": "^3.5.0",
+    "prettier": "^1.6.1",
+    "redux-thunk": "^2.2.0"
+  }
+}
