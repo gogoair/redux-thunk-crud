@@ -84,8 +84,8 @@ Normally only the following thunk action creators should be used directly:
 
 The library abstracts away API calls by using an adapter function provided to the constructor as argument. The default adapter implements API calls using Fetch API in order to provide a default that works for testing without adding a higher-level library as dependency. In a real scenario, you will probably want to write your own adapter which implements the calls using your favorite XMLHttpRequest library. An adapter is a thunk creator which should take the same config object as the included fetchAdapter and return a thunk, a function that takes redux's dispatch() function as an argument and returns a promise. Adapter config object has the following properties:
 
-| Property         | Type    | Description |
-| ------------ | ------- | ------- | ----------- |
+| Property | Type | Description |
+| ------------ | ------- | ----------- |
 | **requstAction** | function | Action creator dispatched just before the API call is made. |
 | **successAction** | function | Action creator dispatched when the API call returns a non-error response. |
 | **failureAction** | function | Action creator dispatched when the API call returns an error response. |
