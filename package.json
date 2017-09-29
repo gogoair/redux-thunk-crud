@@ -1,13 +1,13 @@
 {
   "name": "redux-thunk-crud",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "A set of utilities to handle creation of common reducers and action creators that work with CRUD endpoints of RESTful APIs",
   "main": "lib/index.js",
   "scripts": {
     "build": "./node_modules/babel-cli/bin/babel.js ./src/* --out-dir lib",
     "precommit": "lint-staged && npm test",
     "test": "./node_modules/mocha/bin/mocha --compilers js:babel-core/register",
-    "prebublish": "npm run build"
+    "prepublish": "npm run build"
   },
   "lint-staged": {
     "*.{js,json.css}": [
