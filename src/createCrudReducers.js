@@ -141,7 +141,7 @@ export default function(actionCreators, availableCrudActions = 'CRUD') {
 		[actionTypes.requestOne]: requestOne,
 		[actionTypes.receiveOne]: receiveOne,
 		[actionTypes.receiveOneError]: receiveOneError,
-	}
+	};
 
 	if (hasSave) {
 		actionHandlers[actionTypes.saving] = saving;
@@ -158,7 +158,9 @@ export default function(actionCreators, availableCrudActions = 'CRUD') {
 	return function(state = initialState, action) {
 		if (!action || !action.type || !actionHandlers[action.type]) {
 			return state;
-		}
+		} else if (actionHandlers[action.type] === 'RESET_ALL') {
+		    return initialState;
+        }
 
 		return actionHandlers[action.type](state, action);
 	}
