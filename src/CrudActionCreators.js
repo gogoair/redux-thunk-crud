@@ -37,7 +37,6 @@ export default class CrudActionCreators {
 			deleting:			'DELETING_' + actionTypesSuffix,
 			deleted:			'DELETED_' + actionTypesSuffix,
 			deleteError:		'DELETE_' + actionTypesSuffix + ERROR_SUFFIX,
-            resetAll:           'RESET_ALL',
 		};
 
 		this.requestList = ::this.requestList;
@@ -52,7 +51,6 @@ export default class CrudActionCreators {
 		this.deleting = ::this.deleting;
 		this.deleted = ::this.deleted;
 		this.deleteError = ::this.deleteError;
-		this.resetAll = ::this.resetAll;
 	}
 
 	_getHeaders() {
@@ -66,12 +64,6 @@ export default class CrudActionCreators {
 
 		return {};
 	}
-
-    resetAll() {
-	    return {
-	        type: this.actionTypes.resetAll,
-        }
-    }
 
 	requestList(params) {
 		return {

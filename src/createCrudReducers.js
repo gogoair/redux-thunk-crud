@@ -118,7 +118,7 @@ function deleteError(state, action) {
 	};
 }
 
-export default function(actionCreators, availableCrudActions = 'CRUD') {
+export default function(actionCreators, availableCrudActions = 'CRUD', resetAllActionType='RESET_ALL_DATA') {
 	let initialState = readInitialState;
 
 	const hasSave = availableCrudActions.indexOf('C') >= 0 || availableCrudActions.indexOf('U') >= 0;
@@ -132,7 +132,7 @@ export default function(actionCreators, availableCrudActions = 'CRUD') {
 		initialState = {...initialState, ...deleteInitialState};
 	}
 
-	const actionTypes = actionCreators.actionTypes
+	const actionTypes = actionCreators.actionTypes;
 
 	const actionHandlers = {
 		[actionTypes.request]: request,
@@ -158,7 +158,7 @@ export default function(actionCreators, availableCrudActions = 'CRUD') {
 	return function(state = initialState, action) {
 		if (!action || !action.type || !actionHandlers[action.type]) {
 			return state;
-		} else if (actionHandlers[action.type] === 'RESET_ALL') {
+		} else if (resetAllActionType) {
 		    return initialState;
         }
 
