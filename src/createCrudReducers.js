@@ -100,14 +100,14 @@ function deleting(state, action) {
 		...state,
 		isDeleting: true,
 		deleteError: deleteInitialState.error,
-	}
+	};
 }
 
 function deleted(state, action) {
 	return {
 		...state,
 		isDeleting: false,
-	}
+	};
 }
 
 function deleteError(state, action) {
@@ -118,18 +118,24 @@ function deleteError(state, action) {
 	};
 }
 
-export default function(actionCreators, availableCrudActions = 'CRUD', resetAllActionType='RESET_ALL_DATA') {
+export default function(
+	actionCreators,
+	availableCrudActions = 'CRUD',
+	resetAllActionType = 'RESET_ALL_DATA',
+) {
 	let initialState = readInitialState;
 
-	const hasSave = availableCrudActions.indexOf('C') >= 0 || availableCrudActions.indexOf('U') >= 0;
+	const hasSave =
+		availableCrudActions.indexOf('C') >= 0 ||
+		availableCrudActions.indexOf('U') >= 0;
 	const hasDelete = availableCrudActions.indexOf('D') >= 0;
 
 	if (hasSave) {
-		initialState = {...initialState, ...saveInitialState};
+		initialState = { ...initialState, ...saveInitialState };
 	}
 
 	if (hasDelete) {
-		initialState = {...initialState, ...deleteInitialState};
+		initialState = { ...initialState, ...deleteInitialState };
 	}
 
 	const actionTypes = actionCreators.actionTypes;
@@ -158,10 +164,10 @@ export default function(actionCreators, availableCrudActions = 'CRUD', resetAllA
 	return function(state = initialState, action) {
 		if (!action || !action.type || !actionHandlers[action.type]) {
 			return state;
-		} else if (resetAllActionType) {
-		    return initialState;
-        }
+		} else if (action.type === resetAllActionType) {
+			return initialState;
+		}
 
 		return actionHandlers[action.type](state, action);
-	}
+	};
 }
