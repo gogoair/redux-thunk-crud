@@ -162,10 +162,10 @@ export default function(
 	}
 
 	return function(state = initialState, action) {
-		if (!action || !action.type || !actionHandlers[action.type]) {
-			return state;
-		} else if (action.type === resetAllActionType) {
+		if (action.type === resetAllActionType) {
 			return initialState;
+		} else if (!action || !action.type || !actionHandlers[action.type]) {
+			return state;
 		}
 
 		return actionHandlers[action.type](state, action);
