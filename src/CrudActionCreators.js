@@ -20,23 +20,25 @@ export default class CrudActionCreators {
 		this.json = settings.json;
 		this.headers = settings.headers || defaultSettings.headers;
 		this.getters = settings.getters || defaultSettings.getters;
-		this.responseType = settings.responseType || defaultSettings.responseType
+		this.responseType = settings.responseType || defaultSettings.responseType;
+		this.additionalAdapterSettings = settings.additionalAdapterSettings;
 
-		const actionTypesSuffixPl = settings.actionTypesSuffixPlural || (actionTypesSuffix + 'S');
+		const actionTypesSuffixPl =
+			settings.actionTypesSuffixPlural || actionTypesSuffix + 'S';
 
 		this.actionTypes = {
-			request:			'REQUEST_' + actionTypesSuffixPl,
-			receive:			'RECEIVED_' + actionTypesSuffixPl,
-			receiveError:		'RECEIVED_' + actionTypesSuffixPl + ERROR_SUFFIX,
-			saving:				'SAVING_' + actionTypesSuffix,
-			saved:				'SAVED_' + actionTypesSuffix,
-			saveError:			'SAVE_' + actionTypesSuffix + ERROR_SUFFIX,
-			requestOne:			'REQUEST_' + actionTypesSuffix,
-			receiveOne:			'RECEIVED_' + actionTypesSuffix,
-			receiveOneError:	'RECEIVED_' + actionTypesSuffix + ERROR_SUFFIX,
-			deleting:			'DELETING_' + actionTypesSuffix,
-			deleted:			'DELETED_' + actionTypesSuffix,
-			deleteError:		'DELETE_' + actionTypesSuffix + ERROR_SUFFIX,
+			request: 'REQUEST_' + actionTypesSuffixPl,
+			receive: 'RECEIVED_' + actionTypesSuffixPl,
+			receiveError: 'RECEIVED_' + actionTypesSuffixPl + ERROR_SUFFIX,
+			saving: 'SAVING_' + actionTypesSuffix,
+			saved: 'SAVED_' + actionTypesSuffix,
+			saveError: 'SAVE_' + actionTypesSuffix + ERROR_SUFFIX,
+			requestOne: 'REQUEST_' + actionTypesSuffix,
+			receiveOne: 'RECEIVED_' + actionTypesSuffix,
+			receiveOneError: 'RECEIVED_' + actionTypesSuffix + ERROR_SUFFIX,
+			deleting: 'DELETING_' + actionTypesSuffix,
+			deleted: 'DELETED_' + actionTypesSuffix,
+			deleteError: 'DELETE_' + actionTypesSuffix + ERROR_SUFFIX,
 		};
 
 		this.requestList = ::this.requestList;
@@ -97,6 +99,7 @@ export default class CrudActionCreators {
 			requestAction: this.requestList,
 			successAction: this.receiveList.bind(null, params),
 			failureAction: this.receiveListError.bind(null, params),
+			...this.additionalAdapterSettings,
 		});
 	}
 
@@ -118,9 +121,9 @@ export default class CrudActionCreators {
 		return {
 			type: this.actionTypes.saveError,
 			id,
-			data, 
+			data,
 			error,
-		}
+		};
 	}
 
 	save(data, id, method) {
@@ -137,6 +140,7 @@ export default class CrudActionCreators {
 			requestAction: this.saving,
 			successAction: this.saved.bind(null, id),
 			failureAction: this.saveError.bind(null, id),
+			...this.additionalAdapterSettings,
 		});
 	}
 
@@ -171,6 +175,7 @@ export default class CrudActionCreators {
 			requestAction: this.requestOne,
 			successAction: this.receiveOne.bind(null, id),
 			failureAction: this.receiveOneError.bind(null, id),
+			...this.additionalAdapterSettings,
 		});
 	}
 
@@ -206,6 +211,7 @@ export default class CrudActionCreators {
 			requestAction: this.deleting,
 			successAction: this.deleted.bind(null, id),
 			failureAction: this.deleteError.bind(null, id),
+			...this.additionalAdapterSettings,
 		});
 	}
 }
