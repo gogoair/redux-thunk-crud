@@ -110,9 +110,10 @@ export default class CrudActionCreators {
 		};
 	}
 
-	saved(id) {
+	saved(id, data) {
 		return {
 			type: this.actionTypes.saved,
+			data,
 			id,
 		};
 	}
