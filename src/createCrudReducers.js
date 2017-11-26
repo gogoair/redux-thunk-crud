@@ -77,7 +77,7 @@ function saving(state, action) {
 	return {
 		...state,
 		isSaving: true,
-        savedData: saveInitialState.savedData,
+		savedData: saveInitialState.savedData,
 		saveError: saveInitialState.error,
 	};
 }
@@ -85,7 +85,7 @@ function saving(state, action) {
 function saved(state, action) {
 	return {
 		...state,
-        savedData: action.data,
+		savedData: action.data,
 		isSaving: false,
 	};
 }
