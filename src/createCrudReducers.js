@@ -90,6 +90,29 @@ function saved(state, action) {
 	};
 }
 
+function savedWithMerge(state, action) {
+	if (action.id) {
+		let data = state.data.map(item => {
+			if (item.id == action.id) {
+				return action.data;
+			}
+			return item;
+		});
+		return {
+			...state,
+			isSaving: false,
+			savedData: action.data,
+			data,
+		};
+	}
+	return {
+		...state,
+		isSaving: false,
+		savedData: state.data,
+		data: [...state.data, ...action.data],
+	};
+}
+
 function saveError(state, action) {
 	return {
 		...state,
@@ -113,6 +136,23 @@ function deleted(state, action) {
 	};
 }
 
+function deletedWithMerge(state, action) {
+	if (action.id) {
+		let data = state.data.filter(item => {
+			return item.id != action.id;
+		});
+		return {
+			...state,
+			data,
+			isDeleting: false,
+		};
+	}
+	return {
+		...state,
+		isDeleting: false,
+	};
+}
+
 function deleteError(state, action) {
 	return {
 		...state,
@@ -125,6 +165,7 @@ export default function(
 	actionCreators,
 	availableCrudActions = 'CRUD',
 	resetAllActionType = 'RESET_ALL_DATA',
+	mergeDataChanges = false,
 ) {
 	let initialState = readInitialState;
 
@@ -154,13 +195,17 @@ export default function(
 
 	if (hasSave) {
 		actionHandlers[actionTypes.saving] = saving;
-		actionHandlers[actionTypes.saved] = saved;
+		actionHandlers[actionTypes.saved] = mergeDataChanges
+			? savedWithMerge
+			: saved;
 		actionHandlers[actionTypes.saveError] = saveError;
 	}
 
 	if (hasDelete) {
 		actionHandlers[actionTypes.deleting] = deleting;
-		actionHandlers[actionTypes.deleted] = deleted;
+		actionHandlers[actionTypes.deleted] = mergeDataChanges
+			? deletedWithMerge
+			: deleted;
 		actionHandlers[actionTypes.deleteError] = deleteError;
 	}
 
