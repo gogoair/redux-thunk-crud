@@ -25,6 +25,9 @@ const mockList = [
 	{ id: 1, owner: 1, text: 'test 1' },
 	{ id: 2, owner: 2, text: 'test 2' },
 	{ id: 3, owner: 1, text: 'test 3' },
+	{ text: 'test 4' },
+	{ id: 1, owner: 1, text: 'test 5' },
+	{ id: 1, owner: 1, text: 'test 6' },
 ];
 
 const serachFilter = item => item.owner == 1;
@@ -32,10 +35,10 @@ const serachFilter = item => item.owner == 1;
 fetchMock
 	.get(MOCK_API_BASE_URL, mockList)
 	.get(MOCK_API_BASE_URL + '?owner=1', mockList.filter(serachFilter))
-	.post(MOCK_API_BASE_URL, EMPTY_RESPONSE)
+	.post(MOCK_API_BASE_URL, mockList[3])
 	.get(MOCK_API_FIRST_ITEM_URL, mockList[1])
-	.put(MOCK_API_FIRST_ITEM_URL, EMPTY_RESPONSE)
-	.patch(MOCK_API_FIRST_ITEM_URL, EMPTY_RESPONSE)
+	.put(MOCK_API_FIRST_ITEM_URL, mockList[4])
+	.patch(MOCK_API_FIRST_ITEM_URL, mockList[5])
 	.delete(MOCK_API_FIRST_ITEM_URL, EMPTY_RESPONSE)
 	.catch(404);
 
@@ -224,7 +227,10 @@ describe('redux-crud', function() {
 			promise
 				.then(function() {
 					expect(store).to.have.dispatched(actionCreators.actionTypes.saved);
-					expect(store).to.have.state.like({ isSaving: false });
+					expect(store).to.have.state.like({
+						isSaving: false,
+						savedData: { text: 'test 4' },
+					});
 					done();
 				})
 				.catch(error => done(error));
@@ -232,7 +238,7 @@ describe('redux-crud', function() {
 
 		it('should update a resource', function(done) {
 			const promise = store.dispatch(
-				actionCreators.save({ text: 'test 4' }, 1),
+				actionCreators.save({ text: 'test 5' }, 1),
 			);
 			expect(store).to.have.dispatched(actionCreators.actionTypes.saving);
 			expect(store).to.have.state.like({
@@ -242,7 +248,10 @@ describe('redux-crud', function() {
 			promise
 				.then(function() {
 					expect(store).to.have.dispatched(actionCreators.actionTypes.saved);
-					expect(store).to.have.state.like({ isSaving: false });
+					expect(store).to.have.state.like({
+						isSaving: false,
+						savedData: { id: 1, owner: 1, text: 'test 5' },
+					});
 					done();
 				})
 				.catch(error => done(error));
@@ -250,7 +259,7 @@ describe('redux-crud', function() {
 
 		it('should update a resource with method ovrride', function(done) {
 			const promise = store.dispatch(
-				actionCreators.save({ text: 'test 4' }, 1, 'PATCH'),
+				actionCreators.save({ text: 'test 6' }, 1, 'PATCH'),
 			);
 			expect(store).to.have.dispatched(actionCreators.actionTypes.saving);
 			expect(store).to.have.state.like({
@@ -260,7 +269,10 @@ describe('redux-crud', function() {
 			promise
 				.then(function() {
 					expect(store).to.have.dispatched(actionCreators.actionTypes.saved);
-					expect(store).to.have.state.like({ isSaving: false });
+					expect(store).to.have.state.like({
+						isSaving: false,
+						savedData: { id: 1, owner: 1, text: 'test 6' },
+					});
 					done();
 				})
 				.catch(error => done(error));
