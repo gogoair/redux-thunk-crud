@@ -108,8 +108,8 @@ function savedWithMerge(state, action) {
 	return {
 		...state,
 		isSaving: false,
-		savedData: state.data,
-		data: [...state.data, ...action.data],
+		savedData: action.data,
+		data: [...state.data, action.data],
 	};
 }
 

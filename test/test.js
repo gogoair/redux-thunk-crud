@@ -16,6 +16,7 @@ import { createCrudReducers, CrudActionCreators } from '../src/index.js';
 
 const MOCK_API_BASE_URL = 'https://localhost:1337';
 const MOCK_API_FIRST_ITEM_URL = MOCK_API_BASE_URL + '/' + '1';
+const MOCK_API_THIRD_ITEM_URL = MOCK_API_BASE_URL + '/' + '3';
 
 const EMPTY_RESPONSE = {};
 
@@ -25,21 +26,23 @@ const mockList = [
 	{ id: 1, owner: 1, text: 'test 1' },
 	{ id: 2, owner: 2, text: 'test 2' },
 	{ id: 3, owner: 1, text: 'test 3' },
-	{ text: 'test 4' },
-	{ id: 1, owner: 1, text: 'test 5' },
-	{ id: 1, owner: 1, text: 'test 6' },
+	{ id: 4, owner: 1, text: 'test 4' },
+	{ id: 5, owner: 1, text: 'test 5' },
+	{ id: 6, owner: 1, text: 'test 6' },
 ];
 
-const serachFilter = item => item.owner == 1;
+const searchFilter = item => item.owner == 1;
 
 fetchMock
 	.get(MOCK_API_BASE_URL, mockList)
-	.get(MOCK_API_BASE_URL + '?owner=1', mockList.filter(serachFilter))
+	.get(MOCK_API_BASE_URL + '?owner=1', mockList.filter(searchFilter))
 	.post(MOCK_API_BASE_URL, mockList[3])
 	.get(MOCK_API_FIRST_ITEM_URL, mockList[1])
 	.put(MOCK_API_FIRST_ITEM_URL, mockList[4])
+	.put(MOCK_API_THIRD_ITEM_URL, { id: 3, owner: 1, text: 'test 15' })
 	.patch(MOCK_API_FIRST_ITEM_URL, mockList[5])
 	.delete(MOCK_API_FIRST_ITEM_URL, EMPTY_RESPONSE)
+	.delete(MOCK_API_THIRD_ITEM_URL, EMPTY_RESPONSE)
 	.catch(404);
 
 const actionCreators = new CrudActionCreators(MOCK_API_BASE_URL, 'TEST');
@@ -101,7 +104,7 @@ describe('redux-crud', function() {
 					expect(store).to.have.dispatched(actionCreators.actionTypes.receive);
 					expect(store).to.have.state.like({
 						listLoading: false,
-						data: mockList.filter(serachFilter),
+						data: mockList.filter(searchFilter),
 					});
 					done();
 				})
@@ -218,27 +221,8 @@ describe('redux-crud', function() {
 
 	describe('Create/Update', function() {
 		it('should create a new resource', function(done) {
-			const promise = store.dispatch(actionCreators.save({ text: 'test 4' }));
-			expect(store).to.have.dispatched(actionCreators.actionTypes.saving);
-			expect(store).to.have.state.like({
-				isSaving: true,
-				saveError: undefined,
-			});
-			promise
-				.then(function() {
-					expect(store).to.have.dispatched(actionCreators.actionTypes.saved);
-					expect(store).to.have.state.like({
-						isSaving: false,
-						savedData: { text: 'test 4' },
-					});
-					done();
-				})
-				.catch(error => done(error));
-		});
-
-		it('should update a resource', function(done) {
 			const promise = store.dispatch(
-				actionCreators.save({ text: 'test 5' }, 1),
+				actionCreators.save({ text: 'test 4', owner: 1 }),
 			);
 			expect(store).to.have.dispatched(actionCreators.actionTypes.saving);
 			expect(store).to.have.state.like({
@@ -250,14 +234,101 @@ describe('redux-crud', function() {
 					expect(store).to.have.dispatched(actionCreators.actionTypes.saved);
 					expect(store).to.have.state.like({
 						isSaving: false,
-						savedData: { id: 1, owner: 1, text: 'test 5' },
+						savedData: { id: 4, owner: 1, text: 'test 4' },
 					});
 					done();
 				})
 				.catch(error => done(error));
 		});
 
-		it('should update a resource with method ovrride', function(done) {
+		it('should update a resource', function(done) {
+			const promise = store.dispatch(
+				actionCreators.save({ owner: 1, text: 'test 5' }, 1),
+			);
+			expect(store).to.have.dispatched(actionCreators.actionTypes.saving);
+			expect(store).to.have.state.like({
+				isSaving: true,
+				saveError: undefined,
+			});
+			promise
+				.then(function() {
+					expect(store).to.have.dispatched(actionCreators.actionTypes.saved);
+					expect(store).to.have.state.like({
+						isSaving: false,
+						savedData: { id: 5, owner: 1, text: 'test 5' },
+					});
+					done();
+				})
+				.catch(error => done(error));
+		});
+
+		it('should update a resource with merging response to data', function(
+			done,
+		) {
+			const newStore = chai.createReduxStore({
+				reducer: createCrudReducers(actionCreators, 'CRUD', 'RESET_DATA', true),
+				middleware: [thunkMiddleware],
+			});
+			const promise = newStore.dispatch(
+				actionCreators.save({ id: 4, owner: 1, text: 'test 4' }),
+			);
+			expect(newStore).to.have.dispatched(actionCreators.actionTypes.saving);
+			expect(newStore).to.have.state.like({
+				isSaving: true,
+				saveError: undefined,
+			});
+			promise
+				.then(function() {
+					expect(newStore).to.have.dispatched(actionCreators.actionTypes.saved);
+					expect(newStore).to.have.state.like({
+						isSaving: false,
+						savedData: { id: 4, owner: 1, text: 'test 4' },
+						data: [{ id: 4, owner: 1, text: 'test 4' }],
+					});
+					done();
+				})
+				.catch(error => done(error));
+		});
+
+		it('should update a resource with merging response to data when data contains item with ID', function(
+			done,
+		) {
+			const newStore = chai.createReduxStore({
+				reducer: createCrudReducers(actionCreators, 'CRUD', 'RESET_DATA', true),
+				middleware: [thunkMiddleware],
+			});
+			const promises = newStore
+				.dispatch(actionCreators.fetchList())
+				.then(function() {
+					return newStore.dispatch(
+						actionCreators.save({ id: 3, owner: 1, text: 'test 15' }, 3),
+					);
+				})
+				.then(function() {
+					expect(newStore).to.have.dispatched(
+						actionCreators.actionTypes.saving,
+					);
+					expect(newStore).to.have.state.like({
+						isSaving: true,
+						saveError: undefined,
+					});
+				});
+			promises
+				.then(function() {
+					expect(newStore).to.have.dispatched(actionCreators.actionTypes.saved);
+					expect(newStore).to.have.state.like({
+						isSaving: false,
+						savedData: { id: 3, owner: 1, text: 'test 15' },
+						data: mockList.map(function(item) {
+							return item.id == 3 ? { id: 3, owner: 1, text: 'test 15' } : item;
+						}),
+					});
+					done();
+				})
+				.catch(error => done(error));
+		});
+
+		it('should update a resource with method override', function(done) {
 			const promise = store.dispatch(
 				actionCreators.save({ text: 'test 6' }, 1, 'PATCH'),
 			);
@@ -271,7 +342,7 @@ describe('redux-crud', function() {
 					expect(store).to.have.dispatched(actionCreators.actionTypes.saved);
 					expect(store).to.have.state.like({
 						isSaving: false,
-						savedData: { id: 1, owner: 1, text: 'test 6' },
+						savedData: { id: 6, owner: 1, text: 'test 6' },
 					});
 					done();
 				})
@@ -314,6 +385,43 @@ describe('redux-crud', function() {
 				.then(function() {
 					expect(store).to.have.dispatched(actionCreators.actionTypes.deleted);
 					expect(store).to.have.state.like({ isDeleting: false });
+					done();
+				})
+				.catch(error => done(error));
+		});
+
+		it('should delete a resource with merging response to data when data', function(
+			done,
+		) {
+			const newStore = chai.createReduxStore({
+				reducer: createCrudReducers(actionCreators, 'CRUD', 'RESET_DATA', true),
+				middleware: [thunkMiddleware],
+			});
+			const promises = newStore
+				.dispatch(actionCreators.fetchList())
+				.then(function() {
+					return newStore.dispatch(actionCreators.delete(3));
+				})
+				.then(function() {
+					expect(newStore).to.have.dispatched(
+						actionCreators.actionTypes.deleting,
+					);
+					expect(newStore).to.have.state.like({
+						isDeleting: true,
+						deleteError: undefined,
+					});
+				});
+			promises
+				.then(function() {
+					expect(newStore).to.have.dispatched(
+						actionCreators.actionTypes.deleted,
+					);
+					expect(newStore).to.have.state.like({
+						isDeleting: false,
+						data: mockList.filter(function(item) {
+							return item.id != 3;
+						}),
+					});
 					done();
 				})
 				.catch(error => done(error));
