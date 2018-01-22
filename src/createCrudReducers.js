@@ -166,8 +166,12 @@ export default function(
 	availableCrudActions = 'CRUD',
 	resetAllActionType = 'RESET_ALL_DATA',
 	mergeDataChanges = false,
+	initialDataState,
 ) {
-	let initialState = readInitialState;
+	let initialState = {
+		...readInitialState,
+		data: initialDataState || [],
+	};
 
 	const hasSave =
 		availableCrudActions.indexOf('C') >= 0 ||

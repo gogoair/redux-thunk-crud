@@ -43,7 +43,7 @@ SOME_THING is the suffix for action types which will be generated, for example R
 Next, we create the reducer:
 
 ```js
-const someThingsReducer = createCrudReducers(someThingsActionCreators, methods, resetAllDataActinType);
+const someThingsReducer = createCrudReducers(someThingsActionCreators, methods, resetAllDataActinType, mergeDataChanges, initialDataState);
 ```
 
 Which can simply be fed to combineReducers or directly to createStore just like any other reducer.
@@ -54,7 +54,9 @@ The parameters are:
 
 **methods** - methods you want to use, default is 'CRUD'. If you want to use read only, you can pass 'R', etc
 
-**resetAllDataActionType** - action type for which created crud reducers will reset state to initial, default is 'RESET_ALL_DATA'. Pay attention that you are not already using action type of same name in your app  
+**resetAllDataActionType** - action type for which created crud reducers will reset state to initial, default is 'RESET_ALL_DATA'. Pay attention that you are not already using action type of same name in your app
+**mergeDataChanges** - whether to merge save data on reducer after save, or remove after delete. Defaults to false
+**initialDataState** - initial state for data, defaults to empty array  
 
 ## Action creators
 
