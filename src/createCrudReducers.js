@@ -90,10 +90,10 @@ function saved(state, action) {
 	};
 }
 
-function savedWithMerge(state, action) {
+function savedWithMerge(state, action, primaryKey) {
 	if (action.id) {
 		let data = state.data.map(item => {
-			if (item.id == action.id) {
+			if (item[primaryKey] == action.id) {
 				return action.data;
 			}
 			return item;
@@ -136,10 +136,10 @@ function deleted(state, action) {
 	};
 }
 
-function deletedWithMerge(state, action) {
+function deletedWithMerge(state, action, primaryKey) {
 	if (action.id) {
 		let data = state.data.filter(item => {
-			return item.id != action.id;
+			return item[primaryKey] != action.id;
 		});
 		return {
 			...state,
@@ -200,7 +200,8 @@ export default function(
 	if (hasSave) {
 		actionHandlers[actionTypes.saving] = saving;
 		actionHandlers[actionTypes.saved] = mergeDataChanges
-			? savedWithMerge
+			? (state, action) =>
+					savedWithMerge(state, action, actionCreators.primaryKey)
 			: saved;
 		actionHandlers[actionTypes.saveError] = saveError;
 	}
@@ -208,7 +209,8 @@ export default function(
 	if (hasDelete) {
 		actionHandlers[actionTypes.deleting] = deleting;
 		actionHandlers[actionTypes.deleted] = mergeDataChanges
-			? deletedWithMerge
+			? (state, action) =>
+					deletedWithMerge(state, action, actionCreators.primaryKey)
 			: deleted;
 		actionHandlers[actionTypes.deleteError] = deleteError;
 	}
