@@ -62,7 +62,7 @@ The parameters are:
 
 The action creators constructor has the following signature:
 ```js
-new CrudActionCreator(url, actionTypesSuffix, settings = {})
+new CrudActionCreators(url, actionTypesSuffix, settings = {})
 ```
 
 The parameters are:
