@@ -62,7 +62,7 @@ The parameters are:
 
 The action creators constructor has the following signature:
 ```js
-new CrudActionCreator(url, actionTypesSuffix, settings = {})
+new CrudActionCreators(url, actionTypesSuffix, settings = {})
 ```
 
 The parameters are:
@@ -87,7 +87,7 @@ Normally only the following thunk action creators should be used directly:
 
 | Method         | Type    | Description | Arguments |
 | ------------ | ------- | ----------- | ----------- |
-| **fetchList(params)** | R | Makes a GET request to fetch the list of resources. | **params **- object - optional search parameters |
+| **fetchList(params)** | R | Makes a GET request to fetch the list of resources. | **params** - object - optional search parameters |
 | **fetchOne(id)** | R | Makes a GET request to fetch a single resource. | **id** - any primitive - primary key of the resource to fetch, appended to the endpoint url |
 | **save(data,id,method)** | C/U | Makes a request to create or update a resource. If no method is specified will make POST to create and PUT to update. | **data** - object - object representing the resource to create or new values for the update <br> **id** - any primitive - optional primary key of the resource to update, appended to the url if provided <br> **method** - string - optinal methed to override the default behavior, if not specified POST will be assumed if id is provided and PUT if id is undefined. |
 | **delete(id)** | D | Makes a DELETE request to delete a resource. | **id** - any primitive - primary key of the resource to delete, appended to the endpoint url |
