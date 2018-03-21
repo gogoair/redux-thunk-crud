@@ -1,6 +1,6 @@
 {
   "name": "redux-thunk-crud",
-  "version": "0.8.13",
+  "version": "0.8.14",
   "description": "A set of utilities to handle creation of common reducers and action creators that work with CRUD endpoints of RESTful APIs",
   "main": "lib/index.js",
   "scripts": {

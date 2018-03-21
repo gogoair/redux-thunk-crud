@@ -40,7 +40,7 @@ function receive(state, action) {
 		...state,
 		data: action.data,
 		listLoading: false,
-		listErrorData: undefined,
+		listErrorData: readInitialState.listErrorData,
 	};
 }
 
@@ -70,7 +70,7 @@ function receiveOne(state, action) {
 		currentId: action.id,
 		currentData: action.data,
 		oneLoading: false,
-		oneErrorData: undefined,
+		oneErrorData: readInitialState.oneErrorData,
 	};
 }
 
@@ -98,7 +98,7 @@ function saved(state, action) {
 		...state,
 		savedData: action.data,
 		isSaving: false,
-		saveErrorData: undefined,
+		saveErrorData: saveInitialState.saveErrorData,
 	};
 }
 
@@ -114,7 +114,7 @@ function savedWithMerge(state, action, primaryKey) {
 			...state,
 			isSaving: false,
 			savedData: action.data,
-			saveErrorData: undefined,
+			saveErrorData: saveInitialState.saveErrorData,
 			data,
 		};
 	}
@@ -122,7 +122,7 @@ function savedWithMerge(state, action, primaryKey) {
 		...state,
 		isSaving: false,
 		savedData: action.data,
-		saveErrorData: undefined,
+		saveErrorData: saveInitialState.saveErrorData,
 		data: [...state.data, action.data],
 	};
 }
@@ -148,7 +148,7 @@ function deleting(state, action) {
 function deleted(state, action) {
 	return {
 		...state,
-		deleteErrorData: undefined,
+		deleteErrorData: deleteInitialState.deleteErrorData,
 		isDeleting: false,
 	};
 }
@@ -161,13 +161,13 @@ function deletedWithMerge(state, action, primaryKey) {
 		return {
 			...state,
 			data,
-			deleteErrorData: undefined,
+			deleteErrorData: deleteInitialState.deleteErrorData,
 			isDeleting: false,
 		};
 	}
 	return {
 		...state,
-		deleteErrorData: undefined,
+		deleteErrorData: deleteInitialState.deleteErrorData,
 		isDeleting: false,
 	};
 }
