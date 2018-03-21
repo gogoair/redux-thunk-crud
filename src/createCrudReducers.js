@@ -31,6 +31,7 @@ function request(state, action) {
 		params: action.params,
 		data: readInitialState.data,
 		listError: readInitialState.listError,
+		listErrorData: readInitialState.listErrorData,
 	};
 }
 
@@ -39,6 +40,7 @@ function receive(state, action) {
 		...state,
 		data: action.data,
 		listLoading: false,
+		listErrorData: readInitialState.listErrorData,
 	};
 }
 
@@ -58,6 +60,7 @@ function requestOne(state, action) {
 		currentData: readInitialState.currentData,
 		oneLoading: true,
 		oneError: readInitialState.oneError,
+		oneErrorData: readInitialState.oneErrorData,
 	};
 }
 
@@ -67,6 +70,7 @@ function receiveOne(state, action) {
 		currentId: action.id,
 		currentData: action.data,
 		oneLoading: false,
+		oneErrorData: readInitialState.oneErrorData,
 	};
 }
 
@@ -85,6 +89,7 @@ function saving(state, action) {
 		isSaving: true,
 		savedData: saveInitialState.savedData,
 		saveError: saveInitialState.error,
+		saveErrorData: saveInitialState.saveErrorData,
 	};
 }
 
@@ -93,6 +98,7 @@ function saved(state, action) {
 		...state,
 		savedData: action.data,
 		isSaving: false,
+		saveErrorData: saveInitialState.saveErrorData,
 	};
 }
 
@@ -108,6 +114,7 @@ function savedWithMerge(state, action, primaryKey) {
 			...state,
 			isSaving: false,
 			savedData: action.data,
+			saveErrorData: saveInitialState.saveErrorData,
 			data,
 		};
 	}
@@ -115,6 +122,7 @@ function savedWithMerge(state, action, primaryKey) {
 		...state,
 		isSaving: false,
 		savedData: action.data,
+		saveErrorData: saveInitialState.saveErrorData,
 		data: [...state.data, action.data],
 	};
 }
@@ -133,12 +141,14 @@ function deleting(state, action) {
 		...state,
 		isDeleting: true,
 		deleteError: deleteInitialState.error,
+		deleteErrorData: deleteInitialState.deleteErrorData,
 	};
 }
 
 function deleted(state, action) {
 	return {
 		...state,
+		deleteErrorData: deleteInitialState.deleteErrorData,
 		isDeleting: false,
 	};
 }
@@ -151,11 +161,13 @@ function deletedWithMerge(state, action, primaryKey) {
 		return {
 			...state,
 			data,
+			deleteErrorData: deleteInitialState.deleteErrorData,
 			isDeleting: false,
 		};
 	}
 	return {
 		...state,
+		deleteErrorData: deleteInitialState.deleteErrorData,
 		isDeleting: false,
 	};
 }
