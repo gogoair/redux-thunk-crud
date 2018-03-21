@@ -20,7 +20,7 @@ const MOCK_API_THIRD_ITEM_URL = MOCK_API_BASE_URL + '/' + '3';
 
 const EMPTY_RESPONSE = {};
 
-const ERROR_MESSAGE = 'Not Found';
+const ERROR_MESSAGE = { message: 'Something went wrong' };
 
 const mockList = [
 	{ id: 1, owner: 1, text: 'test 1' },
@@ -191,10 +191,6 @@ describe('redux-crud', function() {
 					expect(store).to.have.dispatched(
 						actionCreators.actionTypes.receiveError,
 					);
-					expect(store).to.have.state.like({
-						listLoading: false,
-						listError: ERROR_MESSAGE,
-					});
 					done();
 				})
 				.catch(error => done(error));
@@ -209,10 +205,6 @@ describe('redux-crud', function() {
 					expect(store).to.have.dispatched(
 						actionCreators.actionTypes.receiveOneError,
 					);
-					expect(store).to.have.state.like({
-						oneLoading: false,
-						oneError: ERROR_MESSAGE,
-					});
 					done();
 				})
 				.catch(error => done(error));
@@ -363,10 +355,6 @@ describe('redux-crud', function() {
 					expect(store).to.have.dispatched(
 						actionCreators.actionTypes.saveError,
 					);
-					expect(store).to.have.state.like({
-						isSaving: false,
-						saveError: ERROR_MESSAGE,
-					});
 					done();
 				})
 				.catch(error => done(error));
@@ -439,10 +427,6 @@ describe('redux-crud', function() {
 					expect(store).to.have.dispatched(
 						actionCreators.actionTypes.deleteError,
 					);
-					expect(store).to.have.state.like({
-						isDeleting: false,
-						deleteError: ERROR_MESSAGE,
-					});
 					done();
 				})
 				.catch(error => done(error));
