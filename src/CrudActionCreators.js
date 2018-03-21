@@ -82,10 +82,9 @@ export default class CrudActionCreators {
 		};
 	}
 
-	receiveListError(params, data, error) {
+	receiveListError(error, params) {
 		return {
 			type: this.actionTypes.receiveError,
-			data,
 			error,
 			params,
 		};
@@ -98,7 +97,7 @@ export default class CrudActionCreators {
 			headers: this._getHeaders(),
 			requestAction: this.requestList,
 			successAction: this.receiveList.bind(null, params),
-			failureAction: this.receiveListError.bind(null, params),
+			failureAction: e => this.receiveListError(e, params),
 			...this.additionalAdapterSettings,
 		});
 	}
@@ -118,11 +117,10 @@ export default class CrudActionCreators {
 		};
 	}
 
-	saveError(id, data, error) {
+	saveError(error, id) {
 		return {
 			type: this.actionTypes.saveError,
 			id,
-			data,
 			error,
 		};
 	}
@@ -140,7 +138,7 @@ export default class CrudActionCreators {
 			headers: this._getHeaders(),
 			requestAction: this.saving,
 			successAction: this.saved.bind(null, id),
-			failureAction: this.saveError.bind(null, id),
+			failureAction: e => this.saveError(e, id),
 			...this.additionalAdapterSettings,
 		});
 	}
@@ -160,12 +158,11 @@ export default class CrudActionCreators {
 		};
 	}
 
-	receiveOneError(id, data, error) {
+	receiveOneError(error, id) {
 		return {
 			type: this.actionTypes.receiveOneError,
 			id,
 			error,
-			data,
 		};
 	}
 
@@ -175,7 +172,7 @@ export default class CrudActionCreators {
 			headers: this._getHeaders,
 			requestAction: this.requestOne,
 			successAction: this.receiveOne.bind(null, id),
-			failureAction: this.receiveOneError.bind(null, id),
+			failureAction: e => this.receiveOneError(e, id),
 			...this.additionalAdapterSettings,
 		});
 	}
@@ -195,10 +192,9 @@ export default class CrudActionCreators {
 		};
 	}
 
-	deleteError(id, data, error) {
+	deleteError(error, id) {
 		return {
 			type: this.actionTypes.deleteError,
-			data,
 			error,
 			id,
 		};
@@ -211,7 +207,7 @@ export default class CrudActionCreators {
 			headers: this._getHeaders,
 			requestAction: this.deleting,
 			successAction: this.deleted.bind(null, id),
-			failureAction: this.deleteError.bind(null, id),
+			failureAction: e => this.deleteError(e, id),
 			...this.additionalAdapterSettings,
 		});
 	}
