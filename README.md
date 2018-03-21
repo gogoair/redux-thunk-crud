@@ -2,11 +2,11 @@
 
 redux-thunk-crud is a library that seeks to eliminate the boilerplate of writing highly repetitive reducers and action creators for simple RESTful API CRUD actions, using redux-thunk to handle asynchronous API calls. It's made of:
 
-CrudActionCreators - a class encapsulating CRUD action creators for a single endpoint
+`CrudActionCreators` - a class encapsulating CRUD action creators for a single endpoint
 
-createCrudReducers - a higher-order function that creates a reducer for a given CrudActionCreators instance
+`createCrudReducers` - a higher-order function that creates a reducer for a given CrudActionCreators instance
 
-fetchAdapter - CrudActionCreators takes an adapter which provides the ability to make API calls. This adapter implements API calls using Fetch API and is included in order to provide a default and make the library testable without adding a dependency
+`fetchAdapter`       - CrudActionCreators takes an adapter which provides the ability to make API calls. This adapter implements API calls using Fetch API and is included in order to provide a default and make the library testable without adding a dependency
 
 [![npm version](https://badge.fury.io/js/redux-thunk-crud.svg)](http://badge.fury.io/js/redux-thunk-crud)
 
@@ -30,7 +30,7 @@ The parts of the library are available as named exports:
 import {createCrudReducers, CrudActionCreators} from 'redux-thunk-crud';
 ```
 
-fetchAdapter is also available as a named export but in most cases shouldn't be used directly.
+`fetchAdapter` is also available as a named export but in most cases shouldn't be used directly.
 
 The first step is to instantiate an object containing action creators for an endpoint, since this also generates action types:
 
@@ -56,11 +56,12 @@ The parameters are:
 
 **resetAllDataActionType** - action type for which created crud reducers will reset state to initial, default is 'RESET_ALL_DATA'. Pay attention that you are not already using action type of same name in your app
 **mergeDataChanges** - whether to merge save data on reducer after save, or remove after delete. Defaults to false
-**initialDataState** - initial state for data, defaults to empty array  
+**initialDataState** - initial state for data, defaults to empty array
 
 ## Action creators
 
 The action creators constructor has the following signature:
+
 ```js
 new CrudActionCreators(url, actionTypesSuffix, settings = {})
 ```
@@ -89,7 +90,7 @@ Normally only the following thunk action creators should be used directly:
 | ------------ | ------- | ----------- | ----------- |
 | **fetchList(params)** | R | Makes a GET request to fetch the list of resources. | **params** - object - optional search parameters |
 | **fetchOne(id)** | R | Makes a GET request to fetch a single resource. | **id** - any primitive - primary key of the resource to fetch, appended to the endpoint url |
-| **save(data,id,method)** | C/U | Makes a request to create or update a resource. If no method is specified will make POST to create and PUT to update. | **data** - object - object representing the resource to create or new values for the update <br> **id** - any primitive - optional primary key of the resource to update, appended to the url if provided <br> **method** - string - optinal methed to override the default behavior, if not specified POST will be assumed if id is provided and PUT if id is undefined. |
+| **save(data,id,method)** | C/U | Makes a request to create or update a resource. If no method is specified it will make POST to create and PUT to update. | **data** - object - object representing the resource to create or new values for the update <br> **id** - any primitive - optional primary key of the resource to update, appended to the url if provided <br> **method** - string - optional method to override the default behavior, if not specified POST will be assumed if id is undefined and PUT if id is provided. |
 | **delete(id)** | D | Makes a DELETE request to delete a resource. | **id** - any primitive - primary key of the resource to delete, appended to the endpoint url |
 
 ## Adapters
@@ -98,7 +99,7 @@ The library abstracts away API calls by using an adapter function provided to th
 
 | Property | Type | Description |
 | ------------ | ------- | ----------- |
-| **requstAction** | function | Action creator dispatched just before the API call is made. |
+| **requestAction** | function | Action creator dispatched just before the API call is made. |
 | **successAction** | function | Action creator dispatched when the API call returns a non-error response. |
 | **failureAction** | function | Action creator dispatched when the API call returns an error response. |
 | **method** | string | HTTP method for the API call. |
@@ -113,7 +114,7 @@ Any of the config properties may be omitted and handling undefined properties is
 
 ## Enhancing and Customizing
 
-If you need more than the stanadrd CRUD action, writing additional action creators as separate functions is the most straightforward way to implement them. If those actions are repetitive, CrudActionCreators can be extended to add new action creators or override the existing ones.
+If you need more than the standard CRUD action, writing additional action creators as separate functions is the most straightforward way to implement them. If those actions are repetitive, CrudActionCreators can be extended to add new action creators or override the existing ones.
 
 The reducer can be enhanced to handle additional action types by passing it through a higher order reducer.
 
