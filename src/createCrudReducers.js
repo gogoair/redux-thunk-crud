@@ -1,23 +1,27 @@
 const readInitialState = {
 	data: [],
 	listError: undefined,
+	listErrorData: undefined,
 	params: undefined,
 	listLoading: false,
 	oneLoading: false,
 	currentId: undefined,
 	currentData: undefined,
 	oneError: undefined,
+	oneErrorData: undefined,
 };
 
 const saveInitialState = {
 	isSaving: false,
 	savedData: undefined,
 	saveError: undefined,
+	saveErrorData: undefined,
 };
 
 const deleteInitialState = {
 	isDeleting: false,
 	deleteError: undefined,
+	deleteErrorData: undefined,
 };
 
 function request(state, action) {
@@ -42,6 +46,7 @@ function receiveError(state, action) {
 	return {
 		...state,
 		listError: action.error,
+		listErrorData: action.data,
 		listLoading: false,
 	};
 }
@@ -70,6 +75,7 @@ function receiveOneError(state, action) {
 		...state,
 		oneLoading: false,
 		oneError: action.error,
+		oneErrorData: action.data,
 	};
 }
 
@@ -117,6 +123,7 @@ function saveError(state, action) {
 	return {
 		...state,
 		saveError: action.error,
+		saveErrorData: action.data,
 		isSaving: false,
 	};
 }
@@ -157,6 +164,7 @@ function deleteError(state, action) {
 	return {
 		...state,
 		deleteError: action.error,
+		deleteErrorData: action.data,
 		isDeleting: false,
 	};
 }
