@@ -43,10 +43,10 @@ SOME_THING is the suffix for action types which will be generated, for example R
 Next, we create the reducer:
 
 ```js
-const someThingsReducer = createCrudReducers(someThingsActionCreators, methods, resetAllDataActinType, mergeDataChanges, initialDataState);
+const someThingsReducer = createCrudReducers(someThingsActionCreators, methods, resetAllDataActionType, mergeDataChanges, initialDataState);
 ```
 
-Which can simply be fed to combineReducers or directly to createStore just like any other reducer.
+Which can simply be feed to `combineReducers` or directly to `createStore` just like any other reducer.
 
 The parameters are:
 
